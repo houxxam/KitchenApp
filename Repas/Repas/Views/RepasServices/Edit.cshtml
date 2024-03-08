@@ -1,0 +1,72 @@
+﻿@model Repas.Models.RepasService
+
+@{
+    ViewData["Title"] = "Modifier Repas";
+}
+
+<p class="text-center bg-white p-3 fw-bold h3 my-3 text-capitalize">@ViewData["Title"]</p>
+<p id="date" class="text-center bg-white p-3 my-3">Date : <span>@ViewBag.date</span></p>
+
+
+<div>
+    <button class="btn btn-primary mb-3" id="edit-btn">Enregistrer</button>
+</div>
+@foreach (var dest in Enum.GetValues(typeof(Destination)))
+{
+    <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)),dest)">
+
+        <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
+        <hr />
+
+        <table class="table table-bordered" id="malade">
+            <thead>
+                <tr>
+                    <th scope="col">Service</th>
+
+                    @foreach (var typeRepas in ViewBag.TypeRepas)
+                    {
+                        @if (@typeRepas.Destination.ToString() == dest.ToString())
+                        {
+                            <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
+                        }
+
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var typeRepasCount = ((List<TypeRepas>)ViewBag.TypeRepas).Where(tr => tr.Destination.ToString() == dest.ToString()).Count();
+                }
+                @foreach (var service in ViewBag.Services)
+                {
+
+                    <tr id="qte">
+                        <th scope="col" ServiceId="@service.Id">@service.ServiceName</th>
+                        @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                        {
+                            <td>
+                                <input class="form-control"  style="width:100%;text-align:center;" />
+                                
+                            </td>
+                        }
+                    </tr>
+
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+}
+
+
+
+
+<div >
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Repas.Models.Service>
+
+@{
+    ViewData["Title"] = "Services";
+}
+
+<p class="text-center bg-white p-3 fw-bold h3 my-3">@ViewData["Title"]</p>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Nouveau service</a>
+</p>
+<div class="div-content border border-light-subtle">
+    
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceName)
+            </th>
+                <th>Editer</th>
+                @* <th>Details</th> *@
+                <th>Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td class="col">
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <td>
+                <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Editer</a>
+            </td>
+             @* <td><a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Details</a></td> *@
+             <td> <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Supprimer</a></td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>

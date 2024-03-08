@@ -1,0 +1,240 @@
+﻿@model Repas.Models.RepasService
+
+@{
+    ViewData["Title"] = "Ajouter repas";
+}
+
+<p class="text-center bg-white p-3 fw-bold h3 my-3 text-capitalize">@ViewData["Title"]</p>
+<p id="date" class="text-center bg-white p-3 my-3">Date : <span id="@ViewBag.IdDateforniture">@ViewBag.DateForniture</span></p>
+
+@* <form>
+    <div class="form-group mb-2">
+        <input type="submit" value="Ajouter" class="btn btn-primary" />
+    </div>
+    <div class="bg-white mb-3 p-3">
+        <div class="input-group">
+            <p>Date : <label asp-for="DateFornitureId" class="control-label"></label></p>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+            <label asp-for="ServiceId" class="control-label">Service </label>
+            <select asp-for="ServiceId" class="form-control" asp-items="ViewBag.ServiceId"></select>
+            </div>
+        </div>
+    </div>
+    @foreach (var dest in Enum.GetValues(typeof(Destination)))
+    {
+
+
+
+        <div class="div-content border border-light-subtle mb-2">
+            <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
+            <hr />
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Type Repas</td>
+                        @foreach (var typeRepas in ViewBag.TypeRepas)
+                        {
+                            @if (@typeRepas.Destination.ToString() == dest.ToString())
+                            {
+                                <th scope="col">@typeRepas.Type</th>
+                            }
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Qte</td>
+
+                        @{
+                            var typeRepasCount = ((List<TypeRepas>)ViewBag.TypeRepas).Where(tr => tr.Destination.ToString() == dest.ToString()).Count();
+                        }
+
+                        @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                        {
+                            <td>
+                                <div class="form-group">
+                                    <input asp-for="TotalRepas" class="form-control" />
+                                    <span asp-validation-for="TotalRepas" class="text-danger"></span>
+                                </div>
+                            </td>
+                        }
+
+                    </tr>
+                </tbody>
+
+
+
+            </table>
+        </div>
+    }
+
+
+
+</form>
+ *@
+
+
+<div>
+    <button class="btn btn-primary" id="save-btn">Ajouter</button>
+</div>
+@foreach (var dest in Enum.GetValues(typeof(Destination)))
+{
+    <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)),dest)">
+       
+        <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
+        <hr />
+
+        <table class="table table-bordered" id="malade">
+            <thead>
+                <tr>
+                    <th scope="col">Service</th>
+
+                    @foreach (var typeRepas in ViewBag.TypeRepas)
+                    {
+                        @if (@typeRepas.Destination.ToString() == dest.ToString())
+                        {
+                            <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
+                        }
+
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var typeRepasCount = ((List<TypeRepas>)ViewBag.TypeRepas).Where(tr => tr.Destination.ToString() == dest.ToString()).Count();
+                }
+                @foreach (var service in ViewBag.Services)
+                {
+
+                    <tr id="qte">
+                        <th scope="col" ServiceId="@service.Id">@service.ServiceName</th>
+                        @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                        {
+                            
+
+                            <td>
+                                <input type="number" value="0" style="width:100%;text-align:center;"  />
+                            </td>
+                        }
+                    </tr>
+                   
+
+                }
+
+               
+
+            </tbody>
+        </table>
+    </div>
+   
+}
+@* 
+<h4>RepasService</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="TotalRepas" class="control-label"></label>
+                <input asp-for="TotalRepas" class="form-control" />
+                <span asp-validation-for="TotalRepas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeRepasId" class="control-label"></label>
+                <select asp-for="TypeRepasId" class="form-control" asp-items="ViewBag.TypeRepasId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceId" class="control-label"></label>
+                <select asp-for="ServiceId" class="form-control" asp-items="ViewBag.ServiceId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="destination" class="control-label"></label>
+                <select asp-for="destination" class="form-control">
+                    @foreach (var item in Enum.GetValues(typeof(Destination)))
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+                <span asp-validation-for="destination" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateFornitureId" class="control-label"></label>
+                <input asp-for="DateFornitureId" class="form-control" />
+                <span asp-validation-for="DateFornitureId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<p>-------------STATIC-----------</p>
+<div class="container mt-5">
+    <a href="index.html">back</a>
+    <form>
+        <input type="submit" class="btn btn-primary" value="Save">
+        <div class="input-group">
+            <p>Date : </p>
+            <input class="form-control" placeholder="yyyy-mm-dd" type="date" />
+        </div>
+        <p class="text-center">EFFECTIF DES REPAS(MALADES)</p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2" scope="col">Service</th>
+                    <th scope="col">Normal</th>
+                    <th scope="col">Sans sel</th>
+                    <th scope="col">Diabétique</th>
+                    <th scope="col">Diabét/s sel</th>
+                    <th scope="col">ss graisse</th>
+                    <th scope="col">Liquide Mixé</th>
+                    <th scope="col">autre</th>
+                    <th scope="col">Lacté</th>
+                    <th scope="col">Lait</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">CMF</th>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                </tr>
+                <tr>
+                    <th scope="row">Traumato</th>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                    <td class=""><input type="text" value="150" style="width: 100%; margin: 0; padding: 0;" /></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>*@
+<div> 
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

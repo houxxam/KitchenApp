@@ -1,0 +1,33 @@
+﻿@model Repas.Models.Service
+
+@{
+    ViewData["Title"] = "Modifier Service";
+}
+
+
+<p class="text-center bg-white p-3 fw-bold h3 my-3">@ViewData["Title"]</p>
+<div class="container">
+<div class="row">
+    <div class="col-md-6 div-content border border-light-subtle">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group my-3">
+                <label asp-for="ServiceName" class="control-label mb-2">Nom de service</label>
+                <input asp-for="ServiceName" class="form-control" />
+                <span asp-validation-for="ServiceName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Enregistrer" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<div class="mt-2">
+    <a  asp-action="Index">Retour a la liste des services</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

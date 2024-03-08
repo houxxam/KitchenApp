@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Repas.Models.TypeRepas>
+
+@{
+    ViewData["Title"] = "Index";
+    var groupedData = Model.GroupBy(x => x.Destination);
+}
+
+<p class="h3 bg-white fw-bold p-3 text-center my-3 text-capitalize">type de repas</p>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Nouveau service</a>
+</p>
+<div class="row d-flex flex-wrap">
+    @foreach (var group in groupedData)
+    {
+        <div class="col-md-6 mb-3">
+            <div class="col-md-12 div-content border border-light-subtle">
+            <h2 class="text-center">@group.Key</h2> <!-- Display the destination as table title -->
+            <hr />
+            <table class="table table-striped">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Type)
+                        </th>
+                        
+                        <th></th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in group)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            
+                            <td><a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Supprimer</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+        </div>
+    }
+</div>
+
+

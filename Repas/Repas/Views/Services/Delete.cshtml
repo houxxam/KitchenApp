@@ -1,0 +1,28 @@
+﻿@model Repas.Models.Service
+
+@{
+    ViewData["Title"] = "Supprimer service";
+}
+
+<p class="text-center bg-white p-3 fw-bold h3 my-3">@ViewData["Title"]</p>
+<div class="div-content border border-light-subtle">
+<h4 class="text-danger">Voullez vous vraiment supprimer Le service : <strong>@Model.ServiceName</strong>  ??</h4>
+<div>
+    
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Nom de service
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ServiceName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Supprimer" class="btn btn-danger" /> |
+        <a asp-action="Index">Retour a la liste des services</a>
+    </form>
+</div>
+</div>
