@@ -1,67 +1,177 @@
-﻿@model Repas.Models.RepasService
-
+﻿@model List<RepasServiceDTO>
 @{
     ViewData["Title"] = "Modifier Repas";
+    var list = ViewBag.RepasServiceList as List<RepasServiceDTO>;
+    
+    
 }
 
 <p class="text-center bg-white p-3 fw-bold h3 my-3 text-capitalize">@ViewData["Title"]</p>
 <p id="date" class="text-center bg-white p-3 my-3">Date : <span>@ViewBag.date</span></p>
 
+    
+<div class="container">
 
-<div>
-    <button class="btn btn-primary mb-3" id="edit-btn">Enregistrer</button>
+     <form asp-action="Edit">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @foreach (var dest in Enum.GetValues(typeof(Destination)))
+        {
+            <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)),dest)">
+                <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
+                <hr />
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Service</th>
+                            @foreach (var typeRepas in ViewBag.TypeRepas)
+                            {
+                                @if (typeRepas.Destination.ToString() == dest.ToString())
+                                {
+                                    <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var filteredTypeRepas = ((List<TypeRepas>)ViewBag.TypeRepas)
+                            .Where(tr => tr.Destination.ToString() == dest.ToString())
+                            .ToList();
+                        }
+                        @foreach (var service in list.Select(s => s.ServiceName).Distinct())
+                        {
+                            <tr>
+                                <td>@service</td>
+                                @{
+                                    var filteredService = list.Where(s => s.ServiceName == service && s.Destination.ToString() == dest.ToString()).ToList();
+                                }
+                                @foreach (var typeRepas in filteredTypeRepas)
+                                {
+                                    <td>
+                                        <div class="form-group">
+                                            @foreach (var repasService in filteredService)
+                                            {
+                                                @if (repasService.TypeRepasName == typeRepas.Type && repasService.Destination.ToString() == dest.ToString() && service == repasService.ServiceName)
+                                                {
+                                                    <input asp-for="@repasService.TotalRapas" class="form-control" />
+                                                    <label>@repasService.ServiceName - @typeRepas.Type - @repasService.Destination</label>
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </form>
 </div>
-@foreach (var dest in Enum.GetValues(typeof(Destination)))
-{
-    <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)),dest)">
 
-        <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
-        <hr />
 
-        <table class="table table-bordered" id="malade">
-            <thead>
-                <tr>
-                    <th scope="col">Service</th>
 
-                    @foreach (var typeRepas in ViewBag.TypeRepas)
-                    {
-                        @if (@typeRepas.Destination.ToString() == dest.ToString())
-                        {
-                            <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
+@* @{
+                            var typeRepasCount = ((IEnumerable<TypeRepas>)ViewBag.TypeRepas)
+                            .Count(tr => tr.Destination.ToString() == dest.ToString());
                         }
-
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    var typeRepasCount = ((List<TypeRepas>)ViewBag.TypeRepas).Where(tr => tr.Destination.ToString() == dest.ToString()).Count();
-                }
-                @foreach (var service in ViewBag.Services)
-                {
-
-                    <tr id="qte">
-                        <th scope="col" ServiceId="@service.Id">@service.ServiceName</th>
-                        @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                        @for (var i = 0; i < list.Count; i++)
                         {
-                            <td>
-                                <input class="form-control"  style="width:100%;text-align:center;" />
-                                
-                            </td>
-                        }
-                    </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <input asp-for="@Model[i].ServiceName" class="form-control" readonly />
+                                    </div>
+                                </td>
+
+                                @foreach (var service in ViewBag.Services)
+                                {
+
+                                    @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                                    {
+                                        <td>
+                                            <div class="form-group">
+
+                                                <input asp-for="@Model[i].TotalRapas" class="form-control" />
+                                            </div>
+                                        </td>
+                                    }
 
 
-                }
 
-            </tbody>
-        </table>
-    </div>
+                                }
 
-}
+                            </tr>
+                    } *@
 
 
 
+@*  <h2>RepasService @i</h2>
+                            <input type="hidden" asp-for="@Model[i].Id" />
+
+                            <div class="form-group">
+                                <label asp-for="@Model[i].Destination" class="control-label">Destination</label>
+                                <input asp-for="@Model[i].Destination" class="form-control" readonly />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="@Model[i].TypeRepasName" class="control-label">TypeRepas Name</label>
+                                <input asp-for="@Model[i].TypeRepasName" class="form-control" readonly />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="@Model[i].TotalRapas" class="control-label">Total Repas</label>
+                                <input asp-for="@Model[i].TotalRapas" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="@Model[i].ServiceName" class="control-label">Service Name</label>
+                                <input asp-for="@Model[i].ServiceName" class="form-control" readonly />
+                            </div> *@
+
+
+
+
+
+@*
+    VERSION 1    
+<div class="container">
+    <h1>Edit RepasService</h1>
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @for (var i = 0; i < list.Count; i++)
+        {
+            <h2>RepasService @i</h2>
+            <input type="hidden" asp-for="@Model[i].Id" />
+
+            <div class="form-group">
+                <label asp-for="@Model[i].Destination" class="control-label">Destination</label>
+                <input asp-for="@Model[i].Destination" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model[i].TypeRepasName" class="control-label">TypeRepas Name</label>
+                <input asp-for="@Model[i].TypeRepasName" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model[i].TotalRapas" class="control-label">Total Repas</label>
+                <input asp-for="@Model[i].TotalRapas" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model[i].ServiceName" class="control-label">Service Name</label>
+                <input asp-for="@Model[i].ServiceName" class="form-control" readonly />
+            </div>
+        }
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div> *@
 
 <div >
     <a asp-action="Index">Back to List</a>

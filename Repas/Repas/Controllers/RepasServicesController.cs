@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -25,10 +21,10 @@ namespace Repas.Controllers
         {
             var appDbContext = _context.RepasServices.Include(r => r.Service)
                 .Include(r => r.TypeRepas)
-                .Include(d=>d.dateForniture)
-                .OrderByDescending(r => r.dateForniture.FornitureDate)
-                .GroupBy(d=>d.dateForniture.Id)
-                .Select(g => g.First());
+                .Include(d => d.dateForniture)
+                .OrderByDescending(r => r.dateForniture.FornitureDate);
+            //.GroupBy(d => d.dateForniture.Id)
+            //.Select(g => g.First());
 
             return View(await appDbContext.ToListAsync());
         }
@@ -60,7 +56,7 @@ namespace Repas.Controllers
 
             if (TempData["FornitureDate"] is string dateFornitureJson)
             {
-                
+
                 DateForniture dateForniture = JsonConvert.DeserializeObject<DateForniture>(dateFornitureJson);
 
 
@@ -69,7 +65,7 @@ namespace Repas.Controllers
             }
 
 
-       
+
             var services = _context.Services.ToList();
             ViewBag.Services = services;
 
@@ -110,35 +106,57 @@ namespace Repas.Controllers
         // GET: RepasServices/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-
-
             if (id == null || _context.RepasServices == null)
             {
                 return NotFound();
             }
 
-            var repasService = await _context.RepasServices.Include(i => i.dateForniture).FirstOrDefaultAsync(i => i.Id == id);
-
-            var services = _context.Services.ToList();
-            ViewBag.Services = services;
+            var repasService = await _context.RepasServices
+                .Include(i => i.dateForniture)
+                .Include(s => s.Service)
+                .Include(t => t.TypeRepas)
+                .FirstOrDefaultAsync(i => i.Id == id);
 
             ViewBag.date = repasService.dateForniture.FornitureDate.ToString("dd/MM/yyyy");
 
             var typeRepas = _context.TypeRepas.ToList();
             ViewBag.TypeRepas = typeRepas;
+            var services = _context.Services.ToList();
+            ViewBag.Services = services;
+
+
 
             if (repasService == null)
             {
                 return NotFound();
             }
-            ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Id", repasService.ServiceId);
-            ViewData["TypeRepasId"] = new SelectList(_context.TypeRepas, "Id", "Id", repasService.TypeRepasId);
+
+            var repasServices = await _context.RepasServices
+                .Include(s => s.Service)
+                .Include(t => t.TypeRepas)
+                .Where(d => d.DateFornitureId == repasService.DateFornitureId)
+                .ToListAsync();
 
 
-            
-            
-            return View(repasService);
+
+
+            var list = new List<RepasServiceDTO>();
+            foreach (var item in repasServices)
+            {
+                list.Add(new RepasServiceDTO()
+                {
+                    Destination = item.destination,
+                    TypeRepasName = item.TypeRepas?.Type,
+                    TotalRapas = item.TotalRepas,
+                    ServiceName = item.Service?.ServiceName
+                });
+            }
+            ViewBag.RepasServiceList = list;
+            return View(list);
         }
+
+
+
 
         // POST: RepasServices/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -211,24 +229,24 @@ namespace Repas.Controllers
             {
                 _context.RepasServices.Remove(repasService);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RepasServiceExists(int id)
         {
-          return (_context.RepasServices?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.RepasServices?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
 
-        
+
         public IActionResult getTpeRepasListbyDestination(Destination dest)
         {
-            
-            var typeRepas = _context.TypeRepas.Where(d=>d.Destination == dest).ToList();
 
-            
+            var typeRepas = _context.TypeRepas.Where(d => d.Destination == dest).ToList();
+
+
             ViewBag.TypeRepas = typeRepas;
 
             return View();

@@ -5,43 +5,35 @@
 
 $(function () {
 
-    $("#save-btn").on("click",(function () {
-
-        const destination = {
-            Malade: 0,
-            Personnel: 1
-        };
-        $('#malade > tbody > tr').each(function (index, tr) {
-
+    $("#save-btn").on("click", function () {
+        $('#malade tbody tr').each(function (index, tr) {
             var dateId = $("#date").find('span').attr('id');
             var dest = $(this).closest('div').attr('id');
             var serviceid = $(tr).find('th').attr('serviceid');
             var servicetext = $(tr).find('th').text();
-            var typerepas = $("#malade > thead > tr>th");
+            var typerepas = $("#malade thead tr th");
             $(tr).find('td').each(function (cellIndex, cell) {
                 var inputVal = $(cell).find('input').val();
-                console.log("SERVICE Name : " + servicetext);
-                console.log("SERVICE : " + serviceid);
-                console.log("TYPE REPAS : " + typerepas[cellIndex + 1].getAttribute('typerepas'));
-                console.log("QTE : " + inputVal);
+                console.log("SERVICE Name: " + servicetext);
+                console.log("SERVICE ID: " + serviceid);
+                console.log("TYPE REPAS: " + typerepas.eq(cellIndex + 1).attr('typerepas'));
+                console.log("QTE: " + inputVal);
                 console.log("-----------------------------------------");
                 var repasData = {
                     TotalRepas: parseInt(inputVal),
-                    TypeRepasId: parseInt(typerepas[cellIndex + 1].getAttribute('typerepas')),
+                    TypeRepasId: parseInt(typerepas.eq(cellIndex + 1).attr('typerepas')),
                     ServiceId: parseInt(serviceid),
                     destination: parseInt(dest),
                     DateFornitureId: parseInt(dateId)
-                    
                 };
                 var apiEndpoint = 'http://localhost:5092/api/RepasServicesApi';
                 sendData(apiEndpoint, repasData);
-                //window.location.href = '/';
             });
-
         });
+        // Move this line outside of the loop
+        //window.location.href = '/'; // Redirect after processing all rows
+    });
 
-
-    }))
 
 
     function sendData(apiEndpoint, repasData) {

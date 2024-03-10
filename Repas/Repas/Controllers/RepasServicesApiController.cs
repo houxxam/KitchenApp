@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repas.Data;
 using Repas.Models;
@@ -25,10 +20,10 @@ namespace Repas.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RepasService>>> GetRepasServices()
         {
-          if (_context.RepasServices == null)
-          {
-              return NotFound();
-          }
+            if (_context.RepasServices == null)
+            {
+                return NotFound();
+            }
             return await _context.RepasServices.ToListAsync();
         }
 
@@ -36,10 +31,10 @@ namespace Repas.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RepasService>> GetRepasService(int id)
         {
-          if (_context.RepasServices == null)
-          {
-              return NotFound();
-          }
+            if (_context.RepasServices == null)
+            {
+                return NotFound();
+            }
             var repasService = await _context.RepasServices.FindAsync(id);
 
             if (repasService == null)
@@ -86,11 +81,11 @@ namespace Repas.Controllers
         [HttpPost]
         public async Task<ActionResult<RepasService>> PostRepasService(RepasService repasService)
         {
-          if (_context.RepasServices == null)
-          {
-              return Problem("Entity set 'AppDbContext.RepasServices'  is null.");
-          }
-            
+            if (_context.RepasServices == null)
+            {
+                return Problem("Entity set 'AppDbContext.RepasServices'  is null.");
+            }
+
             _context.RepasServices.Add(repasService);
             await _context.SaveChangesAsync();
 
@@ -130,6 +125,17 @@ namespace Repas.Controllers
             var repasServices = await _context.RepasServices
                 .Where(d => d.DateFornitureId == DateFornitureId)
                 .ToListAsync();
+            var list = new List<RepasServiceDTO>();
+            foreach (var item in repasServices)
+            {
+                list.Add(new RepasServiceDTO()
+                {
+                    Destination = item.destination,
+                    TypeRepasName = item.TypeRepas?.Type,
+                    TotalRapas = item.TotalRepas,
+                    ServiceName = item.Service?.ServiceName
+                });
+            }
 
             if (repasServices == null || repasServices.Count == 0)
             {
