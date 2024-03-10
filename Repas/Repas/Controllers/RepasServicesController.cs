@@ -22,9 +22,9 @@ namespace Repas.Controllers
             var appDbContext = _context.RepasServices.Include(r => r.Service)
                 .Include(r => r.TypeRepas)
                 .Include(d => d.dateForniture)
-                .OrderByDescending(r => r.dateForniture.FornitureDate);
-            //.GroupBy(d => d.dateForniture.Id)
-            //.Select(g => g.First());
+                .OrderByDescending(r => r.dateForniture.FornitureDate)
+            .GroupBy(d => d.dateForniture.Id)
+            .Select(g => g.First());
 
             return View(await appDbContext.ToListAsync());
         }

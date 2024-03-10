@@ -55,7 +55,7 @@
                                                 @if (repasService.TypeRepasName == typeRepas.Type && repasService.Destination.ToString() == dest.ToString() && service == repasService.ServiceName)
                                                 {
                                                     <input asp-for="@repasService.TotalRapas" class="form-control" />
-                                                    <label>@repasService.ServiceName - @typeRepas.Type - @repasService.Destination</label>
+                                                   @*  <label>@repasService.ServiceName - @typeRepas.Type - @repasService.Destination</label> *@
                                                 }
                                             }
                                         </div>

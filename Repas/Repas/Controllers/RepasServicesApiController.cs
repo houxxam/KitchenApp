@@ -88,8 +88,8 @@ namespace Repas.Controllers
 
             _context.RepasServices.Add(repasService);
             await _context.SaveChangesAsync();
+            return RedirectToAction("Home/Index");
 
-            return CreatedAtAction("GetRepasService", new { id = repasService.Id }, repasService);
         }
 
         // DELETE: api/RepasServicesApi/5
