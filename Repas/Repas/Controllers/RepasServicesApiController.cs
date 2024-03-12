@@ -88,7 +88,7 @@ namespace Repas.Controllers
 
             _context.RepasServices.Add(repasService);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Home/Index");
+            return Ok();
 
         }
 
