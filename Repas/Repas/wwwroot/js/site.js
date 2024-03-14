@@ -128,7 +128,7 @@ $(function () {
         function checkCompletion() {
             completedCount++;
             if (completedCount === totalCount) {
-                window.location.href = '/';
+                window.location.href = '/Repasservices';
                 console.log('refresh');
             }
         }
