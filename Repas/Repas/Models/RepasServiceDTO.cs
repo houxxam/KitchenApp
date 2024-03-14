@@ -3,6 +3,7 @@
     public class RepasServiceDTO
     {
         public int Id { get; set; }
+        public int RepasId { get; set; }
         public string ServiceName { get; set; }
         public string TypeRepasName { get; set; }
         public int? TotalRapas { get; set; }

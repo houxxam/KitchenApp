@@ -11,9 +11,9 @@
 
     
 <div class="container">
-
-     <form asp-action="Edit">
-        <button type="submit" class="btn btn-primary">Save</button>
+    <button class="btn btn-primary" id="edit-btn">Save</button>
+     
+        
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @foreach (var dest in Enum.GetValues(typeof(Destination)))
         {
@@ -54,6 +54,7 @@
                                             {
                                                 @if (repasService.TypeRepasName == typeRepas.Type && repasService.Destination.ToString() == dest.ToString() && service == repasService.ServiceName)
                                                 {
+                                                    <label asp-for="@repasService.RepasId" hidden>@repasService.RepasId</label>
                                                     <input asp-for="@repasService.TotalRapas" class="form-control input-test"  />
                                                    @*  <label>@repasService.ServiceName - @typeRepas.Type - @repasService.Destination</label> *@
                                                 }
@@ -68,7 +69,7 @@
             </div>
         }
 
-    </form>
+   
 </div>
 
 

@@ -145,6 +145,7 @@ namespace Repas.Controllers
             {
                 list.Add(new RepasServiceDTO()
                 {
+                    RepasId = item.Id,
                     Destination = item.destination,
                     TypeRepasName = item.TypeRepas?.Type,
                     TotalRapas = item.TotalRepas,
