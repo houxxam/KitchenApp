@@ -116,8 +116,11 @@ $(function () {
                             };
                         totalCount++;
                         console.log(repasData);
-                        updateRepasService(repasData.Id, repasData, checkCompletion);
-                          
+                        updateRepasService(repasData.Id, repasData,checkCompletion);
+                        
+                        
+                        console.log(totalCount);
+                        
                     } 
                 });
                 
@@ -126,9 +129,11 @@ $(function () {
         }
         // Check completion after all API requests are made
         function checkCompletion() {
+
             completedCount++;
+           
             if (completedCount === totalCount) {
-                window.location.href = '/Repasservices';
+                window.location.replace('/Repasservices');
                 console.log('refresh');
             }
         }
@@ -136,15 +141,18 @@ $(function () {
     });
 
 
-    function updateRepasService(id, repasService) {
+    function updateRepasService(id, repasService, callback) {
         $.ajax({
             url: apiEndpoint +'/'+ id, // Replace ControllerName with your actual controller name
             type: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(repasService),
-            success: function (response) {
-                console.log("Data updated successfully:", response);
+            success: function (_response) {
+                console.log("Data updated successfully:", _response);
                 // Optionally, perform any actions after successful update
+                if (callback) {
+                    callback(); // Invoke the callback function if provided
+                }
             },
             error: function (xhr, status, error) {
                 console.error("Error updating data:", xhr.responseText);
