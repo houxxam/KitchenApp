@@ -75,50 +75,42 @@ $(function () {
     }
 
 
-    ////MODIFIER
-    //$("#edit-btn").on("click", function () {
-    //    const destination = ["malade", "personnel"];
+    //MODIFIER
+    $("#edit-btn").on("click", function () {
+        const destination = ["malade", "personnel"];
 
-    //    for (var i = 0; i < destination.length; i++) {
-    //        $('#' + destination[i] + ' tbody tr').each(function (index, tr) {
-    //            var dateId = $("#date").find('span').attr('id');
-    //            var dest = $(this).closest('div').attr('id');
-    //            var serviceid = $(tr).find('th').attr('serviceid');
-    //            var servicetext = $(tr).find('th').text();
-    //            var typerepas = $("#" + destination[i] + " thead tr th");
+        for (var i = 0; i < destination.length; i++) {
+            $('#' + destination[i] + ' tbody tr').each(function (index, tr) {
+                var dateId = $("#date").find('span').attr('id');
+                var dest = $(this).closest('div').attr('id');
+                var serviceid = $(tr).find('th').attr('serviceid');
+                var servicetext = $(tr).find('th').text();
+                var typerepas = $("#" + destination[i] + " thead tr th");
 
+                
+                $(tr).find('td').each(function (cellIndex, cell) {
+                    var inputVal = $(cell).find('input').val();
 
-    //            $(tr).find('td').each(function (cellIndex, cell) {
-    //                var inputVal = $(cell).find('input').val();
-
-    //                var repasData = {
-    //                    TotalRepas: parseInt(inputVal),
-    //                    TypeRepasId: parseInt(typerepas.eq(cellIndex + 1).attr('typerepas')),
-    //                    ServiceId: parseInt(serviceid),
-    //                    destination: parseInt(dest),
-    //                    DateFornitureId: parseInt(dateId)
-    //                };
-
-
-    //            });
-    //            console.log(dateId);
-    //            console.log(dest);
-    //            console.log(serviceid);
-    //            console.log(dateId);
-    //            console.log(typerepas);
-    //        });
-    //    }
+                    var repasData = {
+                        //RepasId
+                        TotalRepas: parseInt(inputVal),
+                        TypeRepasId: parseInt(typerepas.eq(cellIndex + 1).attr('typerepas')),
+                        ServiceId: parseInt(serviceid),
+                        destination: parseInt(dest),
+                        DateFornitureId: parseInt(dateId)
+                    };
 
 
-    //});
+                });
+                
+            });
+        }
 
 
-   
+    });
 
 
-   
-
-
+  
 
 });
 
