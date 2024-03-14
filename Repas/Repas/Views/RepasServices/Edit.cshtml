@@ -3,11 +3,11 @@
     ViewData["Title"] = "Modifier Repas";
     var list = ViewBag.RepasServiceList as List<RepasServiceDTO>;
     
-    
+
 }
 
 <p class="text-center bg-white p-3 fw-bold h3 my-3 text-capitalize">@ViewData["Title"]</p>
-<p id="date" class="text-center bg-white p-3 my-3">Date : <span>@ViewBag.date</span></p>
+<p id="date" class="text-center bg-white p-3 my-3">Date : <span id="@ViewBag.datId">@ViewBag.date</span></p>
 
     
 <div class="container">
@@ -20,7 +20,7 @@
             <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)),dest)">
                 <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
                 <hr />
-            <table class="table" id="@dest.ToString().ToLower()">
+            <table class="table" id="edit-@dest.ToString().ToLower()">
                     <thead>
                         <tr>
                             <th scope="col">Service</th>
@@ -28,7 +28,7 @@
                             {
                                 @if (typeRepas.Destination.ToString() == dest.ToString())
                                 {
-                                    <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
+                                <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
                                 }
                             }
                         </tr>
@@ -39,12 +39,15 @@
                             .Where(tr => tr.Destination.ToString() == dest.ToString())
                             .ToList();
                         }
-                        @foreach (var service in list.Select(s => s.ServiceName).Distinct())
+                    @foreach (var service in ViewBag.Services)
                         {
+                        
+
+                        
                             <tr>
-                                <td>@service</td>
+                            <td ServiceId="@service.Id" >@service.ServiceName</td>
                                 @{
-                                    var filteredService = list.Where(s => s.ServiceName == service && s.Destination.ToString() == dest.ToString()).ToList();
+                                var filteredService = list.Where(s => s.ServiceName == service.ServiceName && s.Destination.ToString() == dest.ToString()).ToList();
                                 }
                                 @foreach (var typeRepas in filteredTypeRepas)
                                 {
@@ -52,12 +55,12 @@
                                         <div class="form-group">
                                             @foreach (var repasService in filteredService)
                                             {
-                                                @if (repasService.TypeRepasName == typeRepas.Type && repasService.Destination.ToString() == dest.ToString() && service == repasService.ServiceName)
+                                            @if (repasService.TypeRepasName == typeRepas.Type && repasService.Destination.ToString() == dest.ToString() && service.ServiceName == repasService.ServiceName)
                                                 {
-                                                    <label asp-for="@repasService.RepasId" hidden>@repasService.RepasId</label>
-                                                    <input asp-for="@repasService.TotalRapas" class="form-control input-test"  />
-                                                   @*  <label>@repasService.ServiceName - @typeRepas.Type - @repasService.Destination</label> *@
-                                                }
+                                                <label repasId="@repasService.Id" asp-for="@repasService.Id" hidden>@repasService.Id</label>
+                                                    <input asp-for="@repasService.TotalRapas" class="form-control input-test" type="number" />
+@*                                                      <label>id : @repasService.Id- service : @repasService.ServiceName - type repas : @typeRepas.Type - destination : @repasService.Destination</label> 
+ *@                                                }
                                             }
                                         </div>
                                     </td>

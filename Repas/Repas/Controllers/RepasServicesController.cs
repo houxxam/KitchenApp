@@ -118,6 +118,15 @@ namespace Repas.Controllers
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             ViewBag.date = repasService.dateForniture.FornitureDate.ToString("dd/MM/yyyy");
+            ViewBag.datId = repasService.DateFornitureId;
+
+            // Your code to retrieve the repasService with the given id
+            RepasService _repasService = _context.RepasServices.Find(id);
+
+            
+
+
+
 
             var typeRepas = _context.TypeRepas.ToList();
             ViewBag.TypeRepas = typeRepas;
@@ -145,7 +154,7 @@ namespace Repas.Controllers
             {
                 list.Add(new RepasServiceDTO()
                 {
-                    RepasId = item.Id,
+                    Id = item.Id,
                     Destination = item.destination,
                     TypeRepasName = item.TypeRepas?.Type,
                     TotalRapas = item.TotalRepas,

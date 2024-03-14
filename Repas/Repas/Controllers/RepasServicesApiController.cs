@@ -50,7 +50,7 @@ namespace Repas.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRepasService(int id, RepasService repasService)
         {
-            if (id != repasService.Id)
+            if (repasService == null || id != repasService.Id || id == null)
             {
                 return BadRequest();
             }
@@ -75,6 +75,7 @@ namespace Repas.Controllers
 
             return NoContent();
         }
+
 
         // POST: api/RepasServicesApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
