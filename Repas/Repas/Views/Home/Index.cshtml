@@ -37,6 +37,16 @@
     </table>
 </div>
 
+<div id="exist-div" class="div-content border border-light-subtle" style="display: none;">
+    <h3>Date exist voila les details</h3>
+    <table>
+        <thead>
+
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
 
 <div id ="myModal" class="modal" tabindex="-1">
     <div class="modal-dialog">
@@ -46,11 +56,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
+                <p>La date :  <strong id="modal-text-message"></strong> n'est pas exist , Voullez vous créer ? </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                <button id="modal-yes-btn" type="button" class="btn btn-primary">Oui</button>
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Repas.Data;
 using Repas.Models;
+using System.Globalization;
 
 namespace Repas.Controllers
 {
@@ -24,7 +25,7 @@ namespace Repas.Controllers
             {
                 return NotFound();
             }
-            return await _context.RepasServices.ToListAsync();
+            return await _context.RepasServices.Include(d=>d.dateForniture).ToListAsync();
         }
 
         // GET: api/RepasServicesApi/5
@@ -118,9 +119,68 @@ namespace Repas.Controllers
             return (_context.RepasServices?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
+        [HttpGet("test/{dateId:int}")]
+        public async Task<ActionResult> getdataByDateId(int dateId)
+        {
+            var repas = await _context.RepasServices.Include(r => r.Service)
+                .Include(r => r.TypeRepas)
+                .Include(d => d.dateForniture)
+                .Where(d=>d.DateFornitureId == dateId)
+                .ToListAsync();
 
-       
+            var typerepas = await _context.TypeRepas.ToListAsync();
+            
 
-        
+            var TotalRepasByType = new List<TypeRepasDTO>();
+            
+            
+            if(repas != null)
+            {
+                foreach (var _typeRepas in typerepas)
+                {
+                    if(!checkTypeRepas(TotalRepasByType, _typeRepas.Type)) {
+                        TotalRepasByType.Add(new TypeRepasDTO(_typeRepas.Type, 0));
+                    }
+                    
+                }
+
+                foreach(var repa in repas)
+                {
+                    var item = getTypByName(TotalRepasByType, repa.TypeRepas.Type);
+                    if(item != null)
+                    {
+                        item.Count = item.Count+ repa.TotalRepas.Value;
+                    }
+                }
+            }
+
+            return Ok(TotalRepasByType);
+        }
+
+        public bool checkTypeRepas(List<TypeRepasDTO> typeList, string type)
+        {
+            foreach (var item in typeList)
+            {
+                if (item.Name.ToLower() == type.ToLower())
+                {
+                    return true;
+
+                }
+            }
+            return false;
+        }
+        public TypeRepasDTO getTypByName(List<TypeRepasDTO> typeList, string type)
+        {
+            foreach (var item in typeList)
+            {
+                if (item.Name.ToLower() == type.ToLower())
+                {
+                    return item;
+
+                }
+            }
+            return null;
+        }
+
     }
 }

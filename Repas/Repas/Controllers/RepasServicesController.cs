@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Repas.Data;
 using Repas.Models;
+using System.Globalization;
 
 namespace Repas.Controllers
 {
@@ -57,19 +58,24 @@ namespace Repas.Controllers
         }
 
         // GET: RepasServices/Create
-        public IActionResult Create()
+        public IActionResult Create(DateTime? date, int? id)
         {
-
-
-            if (TempData["FornitureDate"] is string dateFornitureJson)
+            if (date.HasValue && id.HasValue)
             {
-
-                DateForniture dateForniture = JsonConvert.DeserializeObject<DateForniture>(dateFornitureJson);
-
-
-                ViewBag.DateForniture = dateForniture.FornitureDate.ToString("dd/MM/yyyy");
-                ViewBag.IdDateforniture = dateForniture.Id;
+                ViewBag.DateForniture = date.Value;
+                ViewBag.IdDateforniture = id.Value;
             }
+
+
+            //if (TempData["FornitureDate"] is string dateFornitureJson)
+            //{
+
+            //    DateForniture dateForniture = JsonConvert.DeserializeObject<DateForniture>(dateFornitureJson);
+
+
+            //    ViewBag.DateForniture = dateForniture.FornitureDate.ToString("dd/MM/yyyy");
+            //    ViewBag.IdDateforniture = dateForniture.Id;
+            //}
 
 
 

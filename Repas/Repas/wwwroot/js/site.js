@@ -192,14 +192,18 @@ $(function () {
             type: 'GET',
             success: function (response) {
                 
-                if (response.length > 0) {
+                if (response) {
                     console.log('Data exists for ' + date + ':', response);
-                    
-                    
+                    $('#exist-div').fadeIn();
+
                 } else {
                     console.log('No data found for ' + date);
                     $("#myModal").modal("show");
-                    
+                    $("#modal-text-message").text(date);
+                    $("#modal-yes-btn").on("click", function () {
+                        createNewDateForniture(date);
+                       // window.location.replace('/repasServices/create/');
+                    });
                 }
             },
             error: function (xhr, status, error) {
@@ -207,6 +211,32 @@ $(function () {
                 // Handle errors if necessary
             }
         });
+    }
+
+    function createNewDateForniture(date) {
+        var newDateForniture = {
+            FornitureDate: date
+            
+        };
+
+        $.ajax({
+            url: '/api/HomeApi/date/create',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(newDateForniture),
+            success: function (response) {
+                console.log('New DateForniture created successfully:', response);
+                // Optionally, perform additional actions after successful creation
+                
+                window.location.replace('/RepasServices/Create?date=' + response.fornitureDate + '&id=' + response.id);
+               
+            },
+            error: function (xhr, status, error) {
+                console.error('Error occurred while creating new DateForniture:', error);
+                // Handle errors if necessary
+            }
+        });
+        
     }
 
 });
