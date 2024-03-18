@@ -3,9 +3,9 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-
-
+<div class="div-content border border-light-subtle mb-3">
+    <div id="calendar" data-provide="calendar"></div>
+</div>
 <p>
     <a class="btn btn-primary" asp-action="Create">Nouveau jour</a>
 </p>
@@ -36,3 +36,25 @@
         </tbody>
     </table>
 </div>
+
+
+<div id ="myModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

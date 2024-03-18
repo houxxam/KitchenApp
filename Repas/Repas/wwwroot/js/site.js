@@ -10,6 +10,7 @@ $(function () {
     const destination = ["malade", "personnel"];
     var apiEndpoint = 'http://localhost:5092/api/RepasServicesApi';
 
+    
 
     // AJOUTER
     $("#save-btn").on("click", function () {
@@ -161,6 +162,52 @@ $(function () {
         });
     }
 
+
+
+    new Calendar('#calendar');
+    // Register events
+    document.querySelector('#calendar').addEventListener('clickDay', function (e) {
+
+
+        var day = e.date.getDate();
+        var month = e.date.getMonth() + 1; // Months are zero-based, so we add 1
+        var year = e.date.getFullYear();
+
+   
+        var dayString = day < 10 ? '0' + day : day.toString();
+        var monthString = month < 10 ? '0' + month : month.toString();
+
+        
+        var formattedDate = year + '-' + monthString + '-' + dayString + 'T00:00:00';
+
+        
+        checkDataExists(formattedDate);
+    });
+
+    // Function to check if data exists for a given date
+    function checkDataExists(date) {
+       
+        $.ajax({
+            url: '/api/HomeApi/date/' + date,
+            type: 'GET',
+            success: function (response) {
+                
+                if (response.length > 0) {
+                    console.log('Data exists for ' + date + ':', response);
+                    
+                    
+                } else {
+                    console.log('No data found for ' + date);
+                    $("#myModal").modal("show");
+                    
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error occurred while checking data:', error);
+                // Handle errors if necessary
+            }
+        });
+    }
 
 });
 

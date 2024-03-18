@@ -119,33 +119,8 @@ namespace Repas.Controllers
         }
 
 
-        // GET: api/RepasServicesApi/date/{DateFornitureId}
-        [HttpGet("date/{DateFornitureId}")]
-        public async Task<ActionResult<List<RepasService>>> GetRepasServiceByDateId(int DateFornitureId)
-        {
-            var repasServices = await _context.RepasServices
-                .Where(d => d.DateFornitureId == DateFornitureId)
-                .ToListAsync();
-            var list = new List<RepasServiceDTO>();
-            foreach (var item in repasServices)
-            {
-                list.Add(new RepasServiceDTO()
-                {
-                    Destination = item.destination,
-                    TypeRepasName = item.TypeRepas?.Type,
-                    TotalRapas = item.TotalRepas,
-                    ServiceName = item.Service?.ServiceName
-                });
-            }
+       
 
-            if (repasServices == null || repasServices.Count == 0)
-            {
-                return NotFound();
-            }
-
-            return repasServices;
-        }
-
-
+        
     }
 }
