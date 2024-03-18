@@ -1,63 +1,54 @@
 ﻿@model IEnumerable<Repas.Models.RepasService>
-
+@using Repas.Controllers
+@inject Repas.Data.AppDbContext _context
 @{
     ViewData["Title"] = "Index";
+    var services = ViewBag.TypeRepas;
+    var controller = new RepasServicesController(_context);
+   
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="div-content border border-light-subtle">
+    <h3>Repas</h3>
+    <table class="table table-striped">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DateFornitureId)
-                
+                Date Forniture
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalRepas)
-               
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.destination)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeRepas)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Service)
-            </th>
+            @foreach (var serv in services)
+            {
+                <th>@serv</th>
+            }
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
                     @item.dateForniture.FornitureDate.ToString("dd/MM/yyyy")
-               
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.TotalRepas)
-                
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.destination)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeRepas.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Service.ServiceName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+                </td>
+                @foreach (var serv in services)
+                {
+                    <td>
+                        @await controller.getCountbyName(serv,item.DateFornitureId)
+                    </td>
+                }
+                <td>
+                    <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                     
+                </td>
+                    <td><a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a></td>
+
+                    <td><a class="btn btn-danger" asp-controller="Home" asp-action="Delete" asp-route-id="@item.DateFornitureId">Delete</a></td>
+            </tr>
+        }
     </tbody>
 </table>
+
+</div>

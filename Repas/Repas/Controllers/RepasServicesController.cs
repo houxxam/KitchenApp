@@ -11,6 +11,7 @@ namespace Repas.Controllers
     {
         private readonly AppDbContext _context;
 
+
         public RepasServicesController(AppDbContext context)
         {
             _context = context;
@@ -25,6 +26,12 @@ namespace Repas.Controllers
                 .OrderByDescending(r => r.dateForniture.FornitureDate)
             .GroupBy(d => d.dateForniture.Id)
             .Select(g => g.First());
+
+            var typeRepas = _context.TypeRepas.Select(s => s.Type).Distinct().ToList();
+            ViewBag.TypeRepas = typeRepas;
+
+
+
 
             return View(await appDbContext.ToListAsync());
         }
@@ -123,7 +130,7 @@ namespace Repas.Controllers
             // Your code to retrieve the repasService with the given id
             RepasService _repasService = _context.RepasServices.Find(id);
 
-            
+
 
 
 
@@ -260,6 +267,14 @@ namespace Repas.Controllers
             ViewBag.TypeRepas = typeRepas;
 
             return View();
+        }
+
+        public async Task<int?> getCountbyName(string name, int date)
+        {
+            return await _context.RepasServices
+                .Where(n => n.TypeRepas.Type == name && n.DateFornitureId == date)
+                .Select(r => r.TotalRepas)
+                .SumAsync();
         }
     }
 }

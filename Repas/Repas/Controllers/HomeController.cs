@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Repas.Data;
 using Repas.Models;
-using System.Diagnostics;
 
 namespace Repas.Controllers
 {
@@ -12,9 +11,9 @@ namespace Repas.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly AppDbContext _context;
 
-        
 
-        public HomeController(ILogger<HomeController> logger , AppDbContext context)
+
+        public HomeController(ILogger<HomeController> logger, AppDbContext context)
         {
             _logger = logger;
             _context = context;
@@ -68,7 +67,7 @@ namespace Repas.Controllers
 
             if (ModelState.IsValid)
             {
-                
+
                 _context.Add(dateForniture);
                 await _context.SaveChangesAsync();
 
@@ -80,7 +79,7 @@ namespace Repas.Controllers
 
                 // Redirect to the Create action of RepasServices controller and pass dateForniture
                 return RedirectToAction("Create", "RepasServices");
-               
+
             }
 
             return View(dateForniture);

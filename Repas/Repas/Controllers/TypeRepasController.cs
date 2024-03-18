@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repas.Data;
 using Repas.Models;
@@ -22,9 +17,9 @@ namespace Repas.Controllers
         // GET: TypeRepas
         public async Task<IActionResult> Index()
         {
-              return _context.TypeRepas != null ? 
-                          View(await _context.TypeRepas.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.TypeRepas'  is null.");
+            return _context.TypeRepas != null ?
+                        View(await _context.TypeRepas.ToListAsync()) :
+                        Problem("Entity set 'AppDbContext.TypeRepas'  is null.");
         }
 
         // GET: TypeRepas/Details/5
@@ -60,7 +55,7 @@ namespace Repas.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+
                 _context.Add(typeRepas);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -151,14 +146,16 @@ namespace Repas.Controllers
             {
                 _context.TypeRepas.Remove(typeRepas);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TypeRepasExists(int id)
         {
-          return (_context.TypeRepas?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.TypeRepas?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+
     }
 }
