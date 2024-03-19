@@ -194,10 +194,11 @@ $(function () {
                 
                 if (response) {
                     console.log('Data exists for ' + date + ':', response);
-                    $('#exist-div').fadeIn();
 
+                    getTypeRepasCount(date,response.id);
                 } else {
                     console.log('No data found for ' + date);
+                    $('#exist-div').hide();
                     $("#myModal").modal("show");
                     $("#modal-text-message").text(date);
                     $("#modal-yes-btn").on("click", function () {
@@ -239,7 +240,57 @@ $(function () {
         
     }
 
+    function getTypeRepasCount(date,dateId) {
+        $.ajax({
+            url: '/api/repasservicesApi/test/' + dateId,
+            type: 'GET',
+            success: function (response) {
+                // Your success handling code here
+                $('#exist-div').fadeIn();
+
+
+                // Clear thead and tbody before appending new data
+                $('#exist-div thead').empty();
+                $('#exist-div tbody').empty();
+                $('#exist-div thead').append('<tr>');
+                // Add the date clicked as the first column header in the thead
+                $('#exist-div thead tr').append('<th> Date </th>');
+                $('#exist-div tbody').append('<tr><td><a class="text-decoration-none text-primary" href="/RepasServices/Details/' + dateId + '">' + formatDate(date) + '</a></td></tr>');
+
+                // Iterate through each item in the response to populate thead and tbody
+                $.each(response, function (index, item) {
+
+                    // Add the name to the thead
+                    $('#exist-div thead tr').append('<th>' + item.name + '</th>');
+
+                    // Add the count to the tbody
+                    $('#exist-div tbody tr').append('<td>' + item.count + '</td>');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error occurred while fetching data:', error);
+                // Handle errors if necessary
+            }
+        });
+    }
+
+    function formatDate(inputDate) {
+        // Parse the input date string
+        const date = new Date(inputDate);
+
+        // Extract day, month, and year components
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+        const year = date.getFullYear();
+
+        // Format the date as 'dd-mm-yyyy'
+        return `${day}-${month}-${year}`;
+    }
+
+    
 });
+
+
 
 
 

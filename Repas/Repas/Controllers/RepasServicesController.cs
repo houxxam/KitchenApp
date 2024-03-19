@@ -48,11 +48,18 @@ namespace Repas.Controllers
             var repasService = await _context.RepasServices
                 .Include(r => r.Service)
                 .Include(r => r.TypeRepas)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(d=>d.dateForniture)
+                .FirstOrDefaultAsync(m => m.DateFornitureId == id);
             if (repasService == null)
             {
                 return NotFound();
             }
+
+            var services = _context.Services.ToList();
+            ViewBag.Services = services;
+
+            var typeRepas = _context.TypeRepas.ToList();
+            ViewBag.TypeRepas = typeRepas;
 
             return View(repasService);
         }

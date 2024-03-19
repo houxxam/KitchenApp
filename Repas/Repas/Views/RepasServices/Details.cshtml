@@ -6,6 +6,55 @@
 
 <h1>Details</h1>
 
+<p>@Model.dateForniture.FornitureDate.ToString("dd-MM-yyyy") </p>
+<div>
+    @foreach (var dest in Enum.GetValues(typeof(Destination)))
+    {
+        <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)),dest)">
+            <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
+            <hr />
+
+            <table class="table table-bordered" id="@dest.ToString().ToLower()">
+                <thead>
+                    <tr>
+                        <th scope="col">Service</th>
+                        @foreach (var typeRepas in ViewBag.TypeRepas)
+                        {
+                            @if (typeRepas.Destination.ToString() == dest.ToString())
+                            {
+                                <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var typeRepasCount = ((List<TypeRepas>)ViewBag.TypeRepas).Where(tr => tr.Destination.ToString() == dest.ToString()).Count();
+                    }
+                    @foreach (var service in ViewBag.Services)
+                    {
+                        <tr>
+                            <th scope="row">@service.ServiceName</th>
+                            @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                            {
+                                
+                                <td>
+                                    @Model.TotalRepas
+                                </td>
+                                
+                                
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+
+
 <div>
     <h4>RepasService</h4>
     <hr />
