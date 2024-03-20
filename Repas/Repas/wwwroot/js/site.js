@@ -255,7 +255,7 @@ $(function () {
                 $('#exist-div thead').append('<tr>');
                 // Add the date clicked as the first column header in the thead
                 $('#exist-div thead tr').append('<th> Date </th>');
-                $('#exist-div tbody').append('<tr><td><a class="text-decoration-none text-primary" href="/RepasServices/Details/' + dateId + '">' + formatDate(date) + '</a></td></tr>');
+                $('#exist-div tbody').append('<tr><td><a class="text-decoration-none text-primary" href="/RepasServices/Details?DateFornitureId=' + dateId + '">' + formatDate(date) + '</a></td></tr>');
 
                 // Iterate through each item in the response to populate thead and tbody
                 $.each(response, function (index, item) {

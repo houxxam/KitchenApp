@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Repas.Data;
 using Repas.Models;
-using System.Globalization;
 
 namespace Repas.Controllers
 {
@@ -38,19 +36,21 @@ namespace Repas.Controllers
         }
 
         // GET: RepasServices/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? DateFornitureId)
         {
-            if (id == null || _context.RepasServices == null)
+            if (DateFornitureId == null || _context.RepasServices == null)
             {
                 return NotFound();
             }
 
-            var repasService = await _context.RepasServices
+            var repasServices = await _context.RepasServices
                 .Include(r => r.Service)
                 .Include(r => r.TypeRepas)
-                .Include(d=>d.dateForniture)
-                .FirstOrDefaultAsync(m => m.DateFornitureId == id);
-            if (repasService == null)
+                .Include(d => d.dateForniture)
+                .Where(m => m.DateFornitureId == DateFornitureId)
+                .ToListAsync();
+
+            if (repasServices == null || repasServices.Count == 0)
             {
                 return NotFound();
             }
@@ -61,7 +61,7 @@ namespace Repas.Controllers
             var typeRepas = _context.TypeRepas.ToList();
             ViewBag.TypeRepas = typeRepas;
 
-            return View(repasService);
+            return View(repasServices);
         }
 
         // GET: RepasServices/Create

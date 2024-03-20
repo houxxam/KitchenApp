@@ -1,97 +1,64 @@
-﻿@model Repas.Models.RepasService
+﻿@model IEnumerable<Repas.Models.RepasService>
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 
-<p>@Model.dateForniture.FornitureDate.ToString("dd-MM-yyyy") </p>
-<div>
-    @foreach (var dest in Enum.GetValues(typeof(Destination)))
-    {
-        <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)),dest)">
-            <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
-            <hr />
 
-            <table class="table table-bordered" id="@dest.ToString().ToLower()">
-                <thead>
+@if (Model.Any())
+{
+    <p class="text-center bg-white p-3 my-3">Date : <strong> @Model.First().dateForniture.FornitureDate.ToString("dd-MM-yyyy")</strong></p>
+}
+@foreach (var dest in Enum.GetValues(typeof(Destination)))
+{
+    <div class="div-content border border-light-subtle mb-2" id="@Array.IndexOf(Enum.GetValues(typeof(Destination)), dest)">
+        <p class="text-center">EFFECTIF DES REPAS <strong class="text-uppercase">( @dest )</strong></p>
+        <hr />
+
+        <table class="table table-bordered" id="@dest.ToString().ToLower()">
+            <thead>
+                <tr>
+                    <th scope="col">Service</th>
+                    @foreach (var typeRepas in ViewBag.TypeRepas)
+                    {
+                        @if (typeRepas.Destination.ToString() == dest.ToString())
+                        {
+                            <th class="text-center" scope="col">@typeRepas.Type</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var service in ViewBag.Services)
+                {
                     <tr>
-                        <th scope="col">Service</th>
+                        <th scope="row">@service.ServiceName</th>
                         @foreach (var typeRepas in ViewBag.TypeRepas)
                         {
-                            @if (typeRepas.Destination.ToString() == dest.ToString())
+                            if (typeRepas.Destination.ToString() == dest.ToString())
                             {
-                                <th scope="col" TypeRepas="@typeRepas.Id">@typeRepas.Type</th>
+                                var repasService = Model.FirstOrDefault(rs => rs.Service.Id == service.Id && rs.TypeRepas.Id == typeRepas.Id);
+                                <td class="text-center">
+                                    @if (repasService != null)
+                                    {
+                                        @repasService.TotalRepas
+                                    }
+                                    else
+                                    {
+                                        <label>0</label>
+                                    }
+                                </td>
                             }
                         }
                     </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var typeRepasCount = ((List<TypeRepas>)ViewBag.TypeRepas).Where(tr => tr.Destination.ToString() == dest.ToString()).Count();
-                    }
-                    @foreach (var service in ViewBag.Services)
-                    {
-                        <tr>
-                            <th scope="row">@service.ServiceName</th>
-                            @foreach (var count in Enumerable.Range(1, typeRepasCount))
-                            {
-                                
-                                <td>
-                                    @Model.TotalRepas
-                                </td>
-                                
-                                
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-</div>
-
-
-
+                }
+            </tbody>
+        </table>
+    </div>
+}
 
 <div>
-    <h4>RepasService</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalRepas)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalRepas)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.destination)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.destination)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateFornitureId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateFornitureId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TypeRepas)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TypeRepas.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Service)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Service.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.FirstOrDefault()?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
