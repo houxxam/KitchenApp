@@ -32,26 +32,54 @@
             <tbody>
                 @foreach (var service in ViewBag.Services)
                 {
-                    <tr>
-                        <th scope="row">@service.ServiceName</th>
-                        @foreach (var typeRepas in ViewBag.TypeRepas)
+                    if (dest.ToString() == "Malade")
+                    {
+                        if (service.IsHospitalier == true)
                         {
-                            if (typeRepas.Destination.ToString() == dest.ToString())
-                            {
-                                var repasService = Model.FirstOrDefault(rs => rs.Service.Id == service.Id && rs.TypeRepas.Id == typeRepas.Id);
-                                <td class="text-center">
-                                    @if (repasService != null)
+                            <tr>
+                                <th scope="row">@service.ServiceName</th>
+                                @foreach (var typeRepas in ViewBag.TypeRepas)
+                                {
+                                    if (typeRepas.Destination.ToString() == dest.ToString())
                                     {
-                                        @repasService.TotalRepas
+                                        var repasService = Model.FirstOrDefault(rs => rs.Service.Id == service.Id && rs.TypeRepas.Id == typeRepas.Id);
+                                        <td class="text-center">
+                                            @if (repasService != null)
+                                            {
+                                                @repasService.TotalRepas
+                                            }
+                                            else
+                                            {
+                                                <label>0</label>
+                                            }
+                                        </td>
                                     }
-                                    else
-                                    {
-                                        <label>0</label>
-                                    }
-                                </td>
-                            }
+                                }
+                            </tr>
                         }
-                    </tr>
+                    
+                    }else{
+                        <tr>
+                            <th scope="row">@service.ServiceName</th>
+                            @foreach (var typeRepas in ViewBag.TypeRepas)
+                            {
+                                if (typeRepas.Destination.ToString() == dest.ToString())
+                                {
+                                    var repasService = Model.FirstOrDefault(rs => rs.Service.Id == service.Id && rs.TypeRepas.Id == typeRepas.Id);
+                                    <td class="text-center">
+                                        @if (repasService != null)
+                                        {
+                                            @repasService.TotalRepas
+                                        }
+                                        else
+                                        {
+                                            <label>0</label>
+                                        }
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
