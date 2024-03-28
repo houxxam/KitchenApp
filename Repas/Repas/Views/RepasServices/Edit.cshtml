@@ -41,8 +41,11 @@
                         }
                     @foreach (var service in ViewBag.Services)
                         {
-                        
 
+                        if (dest.ToString() == "Malade")
+                        {
+                            if (service.IsHospitalier == true)
+                            {
                         
                             <tr>
                             <td ServiceId="@service.Id" >@service.ServiceName</td>
@@ -66,7 +69,34 @@
                                     </td>
                                 }
                             </tr>
+                            }
                         }
+                        else
+                        {
+                            <tr>
+                                <td ServiceId="@service.Id">@service.ServiceName</td>
+                                @{
+                                    var filteredService = list.Where(s => s.ServiceName == service.ServiceName && s.Destination.ToString() == dest.ToString()).ToList();
+                                }
+                                @foreach (var typeRepas in filteredTypeRepas)
+                                {
+                                    <td>
+                                        <div class="form-group">
+                                            @foreach (var repasService in filteredService)
+                                            {
+                                                @if (repasService.TypeRepasName == typeRepas.Type && repasService.Destination.ToString() == dest.ToString() && service.ServiceName == repasService.ServiceName)
+                                                {
+                                                    <label repasId="@repasService.Id" asp-for="@repasService.Id" hidden>@repasService.Id</label>
+                                                    <input asp-for="@repasService.TotalRapas" class="form-control input-test" type="number" />
+                                                    @*                                                      <label>id : @repasService.Id- service : @repasService.ServiceName - type repas : @typeRepas.Type - destination : @repasService.Destination</label>
+                            *@  }
+                                            }
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
                     </tbody>
                 </table>
             </div>

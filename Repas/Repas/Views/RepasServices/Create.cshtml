@@ -40,16 +40,36 @@
                 }
                 @foreach (var service in ViewBag.Services)
                 {
-
-                    <tr>
-                        <th scope="col" ServiceId="@service.Id">@service.ServiceName</th>
-                        @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                    if(dest.ToString() == "Malade")
+                    {
+                        if (service.IsHospitalier == true)
                         {
-                            <td>
-                                <input type="number" value="0" style="width:100%;text-align:center;"  />
-                            </td>
+                            <tr>
+                                <th scope="col" ServiceId="@service.Id">@service.ServiceName</th>
+                                @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                                {
+                                    <td>
+                                        <input type="number" value="0" style="width:100%;text-align:center;" />
+                                    </td>
+                                }
+                            </tr>
                         }
-                    </tr>
+                        
+                    }
+                    else
+                    {
+                        <tr>
+                            <th scope="col" ServiceId="@service.Id">@service.ServiceName</th>
+                            @foreach (var count in Enumerable.Range(1, typeRepasCount))
+                            {
+                                <td>
+                                    <input type="number" value="0" style="width:100%;text-align:center;" />
+                                </td>
+                            }
+                        </tr>
+                    }
+
+                    
                    
 
                 }

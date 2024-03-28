@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repas.Data;
 using Repas.Models;
@@ -22,9 +17,9 @@ namespace Repas.Controllers
         // GET: Services
         public async Task<IActionResult> Index()
         {
-              return _context.Services != null ? 
-                          View(await _context.Services.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Services'  is null.");
+            return _context.Services != null ?
+                        View(await _context.Services.ToListAsync()) :
+                        Problem("Entity set 'AppDbContext.Services'  is null.");
         }
 
         // GET: Services/Details/5
@@ -56,7 +51,7 @@ namespace Repas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ServiceName")] Service service)
+        public async Task<IActionResult> Create([Bind("Id,ServiceName,IsHospitalier")] Service service)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +83,7 @@ namespace Repas.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ServiceName")] Service service)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ServiceName,IsHospitalier")] Service service)
         {
             if (id != service.Id)
             {
@@ -150,14 +145,14 @@ namespace Repas.Controllers
             {
                 _context.Services.Remove(service);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ServiceExists(int id)
         {
-          return (_context.Services?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Services?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
